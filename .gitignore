@@ -1,13 +1,10 @@
-# Virtual environment
-.venv/
-
-# Python cache
 __pycache__/
 *.pyc
-
-# Output files
-posts.csv
-
-# OS files
-.DS_Store
-Thumbs.db
+*.pyo
+*.pyd
+.env
+.venv/
+postgres_data/
+*.db
+*.csv
+*.json

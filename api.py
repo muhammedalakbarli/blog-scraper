@@ -7,14 +7,15 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import logging
 
-from database import SessionLocal, engine
-from scraper.models import Base, Post
-from scraper.schemas import (
+from .database import get_db
+from .models import Post
+from .schemas import (
     PostCreate,
     PostResponse,
     PostUpdate,
     PaginationResponse,
 )
+from .routers import scraper_router
 
 # =========================================================
 # Logging Configuration
@@ -57,23 +58,20 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
 # Database Dependency
 # =========================================================
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
 # =========================================================
 # Startup Event
 # =========================================================
 
 @app.on_event("startup")
 def startup():
-    logger.info("Initializing database...")
     logger.info("Application started successfully.")
 
+
+# =========================================================
+# Routers
+# =========================================================
+
+app.include_router(scraper_router.router)
 
 # =========================================================
 # Health Check
